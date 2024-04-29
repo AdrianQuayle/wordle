@@ -2,7 +2,9 @@ import random
 
 ALL_WORDS = 'word-bank/all_words.txt'
 TARGET_WORDS = 'word-bank/target_words.txt'
+
 GUESSES = 6
+WORD_LENGTH = 5
 
 def welcome():
     print("""   
@@ -21,8 +23,8 @@ def generate_list(file_path):
 def guess_input():
     while True:
         try:
-            guess = str(input("Guess the word: "))
-            if len(guess) == 5:
+            guess = str(input("Guess the word: ").lower())
+            if len(guess) == WORD_LENGTH:
                 if guess in valid_words:
                     print(guess)
                     break
@@ -34,24 +36,20 @@ def guess_input():
             print("Invalid input")
     return guess
 
-def score_guess(guess, secret_word):
+def score_guess(guess, target_word):
     score = []
-    i = 0
-    for char in guess:
-        if char == secret_word[i]:
-            score.append(2)
-        elif char in secret_word:
+    for i in range(len(guess)):
+        if guess[i] == target_word[i]:
+             score.append(2)
+        elif guess[i] in target_word:
             score.append(1)
         else:
             score.append(0)
-        i += 1
     return tuple(score)
-
 
 valid_words = generate_list(ALL_WORDS)
 word_pool = generate_list(TARGET_WORDS)
 secret_word = random.choice(word_pool)
 
-print(secret_word)
 guess = guess_input()
 print(score_guess(guess, secret_word))
