@@ -36,12 +36,12 @@ def guess_input():
             print("Invalid input")
     return guess
 
-def score_guess(guess, target_word):
+def score_guess(guess, secret_word):
     score = []
     for i in range(len(guess)):
-        if guess[i] == target_word[i]:
+        if guess[i] == secret_word[i]:
              score.append(2)
-        elif guess[i] in target_word:
+        elif guess[i] in secret_word:
             score.append(1)
         else:
             score.append(0)
