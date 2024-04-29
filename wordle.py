@@ -14,17 +14,9 @@ def welcome():
     A grey tile indicated the selected letter is not included in the target word.
     """)
 
-def get_valid_words():
-    file = open(ALL_WORDS, 'r')
-    valid_words = file.read().splitlines()
-    file.close()
-    return valid_words
-
-def get_target_word():
-    file = open(TARGET_WORDS, 'r')
-    words = file.read().splitlines()
-    file.close()
-    return random.choice(words)
+def generate_list(file_path):
+    file = open(file_path, 'r').read().splitlines()
+    return file
 
 def guess_input():
     while True:
@@ -42,13 +34,13 @@ def guess_input():
             print("Invalid input")
     return guess
 
-def score_guess(guess, target_word):
+def score_guess(guess, secret_word):
     score = []
     i = 0
     for char in guess:
-        if char == target_word[i]:
+        if char == secret_word[i]:
             score.append(2)
-        elif char in target_word:
+        elif char in secret_word:
             score.append(1)
         else:
             score.append(0)
@@ -56,9 +48,10 @@ def score_guess(guess, target_word):
     return tuple(score)
 
 
-valid_words = get_valid_words()
-target_word = get_target_word()
+valid_words = generate_list(ALL_WORDS)
+word_pool = generate_list(TARGET_WORDS)
+secret_word = random.choice(word_pool)
 
-print(get_target_word())
+print(secret_word)
 guess = guess_input()
-print(score_guess(guess, target_word))
+print(score_guess(guess, secret_word))
