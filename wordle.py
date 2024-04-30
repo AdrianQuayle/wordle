@@ -38,6 +38,7 @@ def guess_input():
 
 def score_guess(guess, secret_word):
     score = []
+    
     for i in range(len(guess)):
         if guess[i] == secret_word[i]:
              score.append(2)
@@ -51,5 +52,22 @@ valid_words = generate_list(ALL_WORDS)
 word_pool = generate_list(TARGET_WORDS)
 secret_word = random.choice(word_pool)
 
-guess = guess_input()
-print(score_guess(guess, secret_word))
+
+def play(attempts):
+    welcome()
+    remaining_attempts = attempts
+
+    while remaining_attempts > 0:
+        guess = guess_input()
+        score = score_guess(guess, secret_word)
+        print(score)
+        if guess != secret_word:      
+            remaining_attempts -= 1
+            print("Remaining Attempts: ", remaining_attempts)
+            if remaining_attempts == 0:
+                print("Lose")
+        else:
+            print("Win!")
+            break
+
+play(GUESSES)
