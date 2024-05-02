@@ -26,7 +26,7 @@ def guess_input():
             guess = str(input("Guess the word: ").lower())
             if len(guess) == WORD_LENGTH:
                 if guess in valid_words:
-                    print(guess)
+                    print()
                     break
                 else:
                     print("Invalid word")
@@ -38,20 +38,36 @@ def guess_input():
 
 def score_guess(guess, secret_word):
     score = []
-    
+    word = list(secret_word)
+        
     for i in range(len(guess)):
         if guess[i] == secret_word[i]:
-             score.append(2)
-        elif guess[i] in secret_word:
-            score.append(1)
+            score.append(2)
+            word[i] = ''
         else:
             score.append(0)
+
+    for i in range(len(guess)):
+         if score[i] == 0 and guess[i] in word:
+            score[i] = 1
+            word[word.index(guess[i])] = ''
+        
     return tuple(score)
 
-valid_words = generate_list(ALL_WORDS)
-word_pool = generate_list(TARGET_WORDS)
-secret_word = random.choice(word_pool)
+def format_score(guess, score):
+    print(end=" ")
+    for char in guess:
+        print(char.upper(), end="  ")
+    print()
 
+    for digit in score:
+        if digit == 2:
+            print("🟩", end=" ")
+        elif digit == 1:
+            print("🟨", end=" ")
+        else:
+            print("⬜", end=" ")
+    print()
 
 def play(attempts):
     welcome()
@@ -61,13 +77,18 @@ def play(attempts):
         guess = guess_input()
         score = score_guess(guess, secret_word)
         print(score)
+        output = format_score(guess, score)
         if guess != secret_word:      
             remaining_attempts -= 1
             print("Remaining Attempts: ", remaining_attempts)
+            print()
             if remaining_attempts == 0:
                 print("Lose")
         else:
             print("Win!")
             break
 
+valid_words = generate_list(ALL_WORDS)
+word_pool = generate_list(TARGET_WORDS)
+secret_word = #random.choice(word_pool)
 play(GUESSES)
