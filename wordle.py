@@ -7,13 +7,17 @@ GUESSES = 6
 WORD_LENGTH = 5
 
 def welcome():
-    print("""   
-    Welcome to Wordle!
-    You have 6 tries to guess the five-letter word.
-    Type your guess into the console and submit by pressing enter.
-    A yellow tile indicated that you selected the right letter but it's in the wrong spot.
-    A green tile indicates the correct letter in the correct spot.
-    A grey tile indicated the selected letter is not included in the target word.
+    print("""
++----------------------------------------------------------------------------------------------+     
+|                                                                                              |
+|    Welcome to Wordle!                                                                        |
+|    You have 6 tries to guess the five-letter word.                                           |
+|    Type your guess into the console and submit by pressing enter.                            |
+|    A yellow tile indicated that you selected the right letter but it's in the wrong spot.    |
+|    A green tile indicates the correct letter in the correct spot.                            |
+|    A grey tile indicated the selected letter is not included in the target word.             |
+|                                                                                              |
++----------------------------------------------------------------------------------------------+
     """)
 
 def generate_list(file_path):
@@ -29,14 +33,30 @@ def guess_input():
                     print()
                     break
                 else:
-                    print("Invalid word")
+                    print("Invalid word\n")
             else:
-                print("Input must be 5 characters long")
+                print("Input must be 5 characters long\n")
         except:
-            print("Invalid input")
+            print("Invalid input\n")
     return guess
 
 def score_guess(guess, secret_word):
+    """                                                       
+    >>> score_guess('hello', 'hello')
+    (2, 2, 2, 2, 2)
+    >>> score_guess('drain', 'float')
+    (0, 0, 1, 0, 0)
+    >>> score_guess('hello', 'spams')
+    (0, 0, 0, 0, 0)
+    >>> score_guess('gauge', 'range')
+    (0, 2, 0, 2, 2)
+    >>> score_guess('melee', 'erect')
+    (0, 1, 0, 1, 0)
+    >>> score_guess('array', 'spray')
+    (0, 0, 2, 2, 2)
+    >>> score_guess('train', 'tenor')
+    (2, 1, 0, 0, 1)
+    """
     score = []
     word = list(secret_word)
         
@@ -55,6 +75,24 @@ def score_guess(guess, secret_word):
     return tuple(score)
 
 def format_score(guess, score):
+    """
+    >>> print(format_score('hello', (0,0,0,0,0)))
+     H  E  L  L  O  
+    ⬜ ⬜ ⬜ ⬜ ⬜ 
+    None
+    >>> print(format_score('hello', (0,0,0,1,1)))
+     H  E  L  L  O  
+    ⬜ ⬜ ⬜ 🟨 🟨 
+    None
+    >>> print(format_score('hello', (1,0,0,2,1)))
+     H  E  L  L  O  
+    🟨 ⬜ ⬜ 🟩 🟨 
+    None
+    >>> print(format_score('hello', (2,2,2,2,2)))
+     H  E  L  L  O  
+    🟩 🟩 🟩 🟩 🟩 
+    None
+    """
     print(end=" ")
     for char in guess:
         print(char.upper(), end="  ")
@@ -69,6 +107,25 @@ def format_score(guess, score):
             print("⬜", end=" ")
     print()
 
+def validate_score(score):
+    """
+    >>> validate_score((1,1,1,1,1))
+    False
+    >>> validate_score((2,2,2,2,1))
+    False
+    >>> validate_score((0,0,0,0,0))
+    False
+    >>> validate_score((2,2,2,2,2))
+    True
+    """
+    win_condition = True
+
+    for digit in score:
+        if digit != 2:
+            win_condition = False
+            break
+    return win_condition
+
 def play(attempts):
     welcome()
     remaining_attempts = attempts
@@ -78,17 +135,40 @@ def play(attempts):
         score = score_guess(guess, secret_word)
         print(score)
         output = format_score(guess, score)
-        if guess != secret_word:      
+        if validate_score(score) == False:
             remaining_attempts -= 1
             print("Remaining Attempts: ", remaining_attempts)
             print()
             if remaining_attempts == 0:
-                print("Lose")
+                print("\nSorry, you lost. The word was: " + secret_word)
         else:
-            print("Win!")
+            print("\nYou won!")
             break
 
 valid_words = generate_list(ALL_WORDS)
 word_pool = generate_list(TARGET_WORDS)
-secret_word = #random.choice(word_pool)
-play(GUESSES)
+secret_word = random.choice(word_pool)
+
+def word_test():
+    """
+    >>> valid_words[0]
+    'aahed'
+    >>> valid_words[-1]
+    'zymic'
+    >>> valid_words[10:15]
+    ['abamp', 'aband', 'abase', 'abash', 'abask']
+    """
+
+def main(test=False):
+    if test:
+        import doctest
+        doctest_result = doctest.testmod()
+        print(doctest_result)
+        if doctest_result.failed == 0:
+            print("Doctests passed!")
+        else:
+            print("Doctests failed!")
+    play(GUESSES)
+
+if __name__ == '__main__':
+    print(main(test=True))
