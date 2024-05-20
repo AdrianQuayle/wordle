@@ -27,20 +27,15 @@ Welcome to the Wordle game! This is a simple word guessing game where you have t
    ```
 6. Follow the instructions provided in the console to play the game.
 
-### Running Tests
-To run the included doctests and ensure the game functions correctly, use the following command:
-```sh
-python wordle.py -t
-```
-This will execute the doctests and print the results. If all tests pass, you will see "Doctests passed!".
-
 ## Dependencies
 - Python 3
 
 ## Troubleshooting
+- If you encounter an error saying `ModuleNotFoundError: No module named 'wordle'`, ensure you are running the command from the correct directory.
 - Make sure the `word-bank` folder is in the same directory as `wordle.py`.
 
 ## Author
 © 2024 Adrian Quayle
 
-Enjoy playing Wordle!
+## Acknowledgements
+- Inspired by the popular Wordle game.
