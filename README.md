@@ -22,6 +22,7 @@ Welcome to the Wordle game! This is a simple word guessing game where you have t
 3. Open a terminal or command prompt.
 4. Navigate to the directory where you downloaded the repository.
 5. Run the following command to start the game:
+   
    ```sh
    python wordle.py
    ```

@@ -126,15 +126,23 @@ def validate_score(score):
             break
     return win_condition
 
+def update_keyboard(keyboard, guess, score):
+    for char, digit in zip(guess, score):
+        if digit == 0 and char in keyboard:
+            keyboard = keyboard.replace(char, "-")
+    return keyboard
+
 def play(attempts):
     welcome()
     remaining_attempts = attempts
+    keyboard = "qwertyuiop\nasdfghjkl\nzxcvbnm"
 
     while remaining_attempts > 0:
+        print(f"Keyboard:\n{keyboard.upper()}\n" )
         guess = guess_input()
         score = score_guess(guess, secret_word)
-        print(score)
-        output = format_score(guess, score)
+        format_score(guess, score)
+        keyboard = update_keyboard(keyboard, guess, score)
         if validate_score(score) == False:
             remaining_attempts -= 1
             print("Remaining Attempts: ", remaining_attempts)
@@ -171,4 +179,4 @@ def main(test=False):
     play(GUESSES)
 
 if __name__ == '__main__':
-    print(main(test=True))
+    main()
